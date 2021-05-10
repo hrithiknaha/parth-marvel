@@ -2,34 +2,27 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const md5 = require("blueimp-md5");
-const publickey = "a9985b299f04decc1427fb3b8d140dd6";
-const privatekey = "f74a2c2d21ce4f90978e52bcd6d3108250293f1a";
-const ts = new Date().getTime();
-const stringToHash = ts + privatekey + publickey;
-const hash = md5(stringToHash);
-const baseUrl = "https://gateway.marvel.com:443/v1/public/comics";
-const url = baseUrl + "?ts=" + ts + "&apikey=" + publickey + "&hash=" + hash;
-
 function Comicspage(props) {
 	const [offset, setOffset] = useState(0);
-	const [comics, setComics] = useState(null);
+	const [comics, setComics] = useState();
 	const [page, setPage] = useState(props.match.params.page);
+	const [total, setTotal] = useState();
+
 	useEffect(() => {
+		const getCdata = async () => {
+			try {
+				axios
+					.get("/comics/page/" + props.match.params.page)
+					.then(({ data }) => {
+						setComics(data.results);
+						setTotal(data.total);
+					});
+			} catch (e) {
+				console.log(e);
+			}
+		};
 		getCdata();
 	}, [page]);
-
-	let getCdata = async () => {
-		try {
-			const data = await axios.get(
-				url + "&offset=" + 20 * props.match.params.page + "&limit=20"
-			);
-			setComics(data);
-			console.log(data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
 
 	return (
 		<div
@@ -40,23 +33,20 @@ function Comicspage(props) {
 				backgroundSize: "cover",
 			}}
 		>
-			{(comics &&
-				props.match.params.page > parseInt(comics.data.data.total / 20)) ||
+			{(comics && props.match.params.page > parseInt(total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
 			) : (
 				<div>
 					<p>
-						{comics &&
-							parseInt(comics.data.data.total / 20) >
-								props.match.params.page && (
-								<Link
-									to={`/comics/page/${parseInt(props.match.params.page) + 1}`}
-									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
-								>
-									Next Page
-								</Link>
-							)}
+						{comics && parseInt(total / 20) > props.match.params.page && (
+							<Link
+								to={`/comics/page/${parseInt(props.match.params.page) + 1}`}
+								onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+							>
+								Next Page
+							</Link>
+						)}
 					</p>
 
 					<p>
@@ -71,7 +61,7 @@ function Comicspage(props) {
 					</p>
 
 					{comics &&
-						comics.data.data.results.map((c) => (
+						comics.map((c) => (
 							<ul>
 								<li>
 									{" "}
