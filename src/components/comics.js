@@ -1,27 +1,13 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { getComics } from "../actions/comics";
 
 function Comicspage(props) {
-	const [offset, setOffset] = useState(0);
-	const [comics, setComics] = useState();
 	const [page, setPage] = useState(props.match.params.page);
-	const [total, setTotal] = useState();
 
 	useEffect(() => {
-		const getCdata = async () => {
-			try {
-				axios
-					.get("/comics/page/" + props.match.params.page)
-					.then(({ data }) => {
-						setComics(data.results);
-						setTotal(data.total);
-					});
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getCdata();
+		props.getComics(props.match.params.page);
 	}, [page]);
 
 	return (
@@ -33,20 +19,22 @@ function Comicspage(props) {
 				backgroundSize: "cover",
 			}}
 		>
-			{(comics && props.match.params.page > parseInt(total / 20)) ||
+			{(props.comics.comics &&
+				props.match.params.page > parseInt(props.comics.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
 			) : (
 				<div>
 					<p>
-						{comics && parseInt(total / 20) > props.match.params.page && (
-							<Link
-								to={`/comics/page/${parseInt(props.match.params.page) + 1}`}
-								onClick={() => setPage(parseInt(props.match.params.page) + 1)}
-							>
-								Next Page
-							</Link>
-						)}
+						{props.comics.comics &&
+							parseInt(props.comics.total / 20) > props.match.params.page && (
+								<Link
+									to={`/comics/page/${parseInt(props.match.params.page) + 1}`}
+									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+								>
+									Next Page
+								</Link>
+							)}
 					</p>
 
 					<p>
@@ -60,8 +48,8 @@ function Comicspage(props) {
 						) : null}
 					</p>
 
-					{comics &&
-						comics.map((c) => (
+					{props.comics.comics &&
+						props.comics.comics.map((c) => (
 							<ul>
 								<li>
 									{" "}
@@ -75,4 +63,8 @@ function Comicspage(props) {
 	);
 }
 
-export default Comicspage;
+const mapStateToProps = (state) => ({
+	comics: state.comics,
+});
+
+export default connect(mapStateToProps, { getComics })(Comicspage);

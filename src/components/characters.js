@@ -1,30 +1,14 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { getCharacters } from "../actions/characters";
 
 function Characterspage(props) {
-	const [offset, setOffset] = useState(0);
-	const [characters, setCharacters] = useState();
 	const [page, setPage] = useState(props.match.params.page);
-	const [total, setTotal] = useState();
 
 	useEffect(() => {
-		const getCdata = async () => {
-			try {
-				axios
-					.get("/characters/page/" + props.match.params.page)
-					.then(({ data }) => {
-						setCharacters(data.results);
-						setTotal(data.total);
-					});
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getCdata();
+		props.getCharacters(props.match.params.page);
 	}, [page]);
-
-	console.log("/characters/page/" + props.match.params.page);
 
 	return (
 		<div
@@ -35,20 +19,25 @@ function Characterspage(props) {
 				backgroundSize: "cover",
 			}}
 		>
-			{(characters && props.match.params.page > parseInt(total / 20)) ||
+			{(props.characters.characters &&
+				props.match.params.page > parseInt(props.characters.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
 			) : (
 				<div>
 					<p>
-						{characters && parseInt(total / 20) > props.match.params.page && (
-							<Link
-								to={`/characters/page/${parseInt(props.match.params.page) + 1}`}
-								onClick={() => setPage(parseInt(props.match.params.page) + 1)}
-							>
-								Next Page
-							</Link>
-						)}
+						{props.characters.characters &&
+							parseInt(props.characters.total / 20) >
+								props.match.params.page && (
+								<Link
+									to={`/characters/page/${
+										parseInt(props.match.params.page) + 1
+									}`}
+									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+								>
+									Next Page
+								</Link>
+							)}
 					</p>
 
 					<p>
@@ -62,8 +51,8 @@ function Characterspage(props) {
 						) : null}
 					</p>
 
-					{characters &&
-						characters.map((c) => (
+					{props.characters.characters &&
+						props.characters.characters.map((c) => (
 							<ul>
 								<li>
 									{" "}
@@ -77,4 +66,8 @@ function Characterspage(props) {
 	);
 }
 
-export default Characterspage;
+const mapStateToProps = (state) => ({
+	characters: state.characters,
+});
+
+export default connect(mapStateToProps, { getCharacters })(Characterspage);

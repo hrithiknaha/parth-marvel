@@ -1,27 +1,30 @@
 import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { getSeries } from "../actions/series";
 
 function Seriespage(props) {
 	const [offset, setOffset] = useState(0);
-	const [series, setSeries] = useState();
+	// const [series, setSeries] = useState();
 	const [page, setPage] = useState(props.match.params.page);
-	const [total, setTotal] = useState();
+	// const [total, setTotal] = useState();
 
 	useEffect(() => {
-		const getCdata = async () => {
-			try {
-				axios
-					.get("/series/page/" + props.match.params.page)
-					.then(({ data }) => {
-						setSeries(data.results);
-						setTotal(data.total);
-					});
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getCdata();
+		props.getSeries(props.match.params.page);
+		// const getCdata = async () => {
+		// 	try {
+		// 		axios
+		// 			.get("/series/page/" + props.match.params.page)
+		// 			.then(({ data }) => {
+		// 				setSeries(data.results);
+		// 				setTotal(data.total);
+		// 			});
+		// 	} catch (e) {
+		// 		console.log(e);
+		// 	}
+		// };
+		// getCdata();
 	}, [page]);
 
 	return (
@@ -33,20 +36,22 @@ function Seriespage(props) {
 				backgroundSize: "cover",
 			}}
 		>
-			{(series && props.match.params.page > parseInt(total / 20)) ||
+			{(props.series.series &&
+				props.match.params.page > parseInt(props.series.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
 			) : (
 				<div>
 					<p>
-						{series && parseInt(total / 20) > props.match.params.page && (
-							<Link
-								to={`/series/page/${parseInt(props.match.params.page) + 1}`}
-								onClick={() => setPage(parseInt(props.match.params.page) + 1)}
-							>
-								Next Page
-							</Link>
-						)}
+						{props.series.series &&
+							parseInt(props.series.total / 20) > props.match.params.page && (
+								<Link
+									to={`/series/page/${parseInt(props.match.params.page) + 1}`}
+									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+								>
+									Next Page
+								</Link>
+							)}
 					</p>
 
 					<p>
@@ -59,8 +64,8 @@ function Seriespage(props) {
 							</Link>
 						) : null}
 					</p>
-					{series &&
-						series.map((s) => (
+					{props.series.series &&
+						props.series.series.map((s) => (
 							<ul>
 								<li>
 									{" "}
@@ -74,4 +79,8 @@ function Seriespage(props) {
 	);
 }
 
-export default Seriespage;
+const mapStateToProps = (state) => ({
+	series: state.series,
+});
+
+export default connect(mapStateToProps, { getSeries })(Seriespage);

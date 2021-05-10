@@ -9,21 +9,25 @@ import comicDetails from "./components/comicDetails";
 import series from "./components/series";
 import seriesDetails from "./components/seriesDetails";
 import errorpage from "./components/error";
+import { Provider } from "react-redux";
+import store from "./store";
 
 function App() {
 	return (
-		<Router>
-			<Switch>
-				<Route exact path="/" component={index} />
-				<Route exact path="/characters/page/:page" component={characters} />
-				<Route exact path="/comics/page/:page" component={comics} />
-				<Route exact path="/series/page/:page" component={series} />
-				<Route exact path="/characters/:id" component={characterDetails} />
-				<Route exact path="/comics/:id" component={comicDetails} />
-				<Route exact path="/series/:id" component={seriesDetails} />
-				<Route path="*" exact component={errorpage} status={404} />
-			</Switch>
-		</Router>
+		<Provider store={store}>
+			<Router>
+				<Switch>
+					<Route exact path="/" component={index} />
+					<Route exact path="/characters/page/:page" component={characters} />
+					<Route exact path="/comics/page/:page" component={comics} />
+					<Route exact path="/series/page/:page" component={series} />
+					<Route exact path="/characters/:id" component={characterDetails} />
+					<Route exact path="/comics/:id" component={comicDetails} />
+					<Route exact path="/series/:id" component={seriesDetails} />
+					<Route path="*" exact component={errorpage} status={404} />
+				</Switch>
+			</Router>
+		</Provider>
 	);
 }
 
