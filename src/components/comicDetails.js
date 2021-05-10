@@ -13,63 +13,52 @@ const baseUrl = "https://gateway.marvel.com:443/v1/public/comics/";
 const url = baseUrl + "?ts=" + ts + "&apikey=" + publickey + "&hash=" + hash;
 
 function ComicDetails(props) {
-	const [comicData, setcomicData] = useState(null);
+	const [comic, setComic] = useState();
 
 	useEffect(() => {
-		getcomicDetails();
+		let getComicDetails = async () => {
+			console.log(props.match.params.id);
+			try {
+				axios
+					.get("/details/comics/" + props.match.params.id)
+					.then(({ data }) => {
+						setComic(data.results[0]);
+					});
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getComicDetails();
 	}, [props.match.params.id]);
-
-	let getcomicDetails = async () => {
-		try {
-			// console.log(baseUrl + props.match.params.id + '?ts=' + ts + '&apikey=' + publickey + '&hash=' + hash);
-			const data = await axios.get(
-				baseUrl +
-					props.match.params.id +
-					"?ts=" +
-					ts +
-					"&apikey=" +
-					publickey +
-					"&hash=" +
-					hash
-			);
-
-			setcomicData(data);
-			console.log(data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
 
 	return (
 		<div>
-			{comicData && (
+			{comic && (
 				<div>
 					<Card style={{ width: "25rem" }}>
 						<Card.Body>
 							<Card.Title>
 								<b>Comic Name: </b>
-								{comicData.data.data.results[0].title}
+								{comic.title}
 							</Card.Title>
 							<Card.Img
 								variant="bottom"
-								src={`${comicData.data.data.results[0].thumbnail.path}.${comicData.data.data.results[0].thumbnail.extension}`}
+								src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
 							/>
-							<Card.Text>
-								{comicData.data.data.results[0].description}
-							</Card.Text>
+							<Card.Text>{comic.description}</Card.Text>
 							<Card.Text>
 								<b>Comic Id:</b>
-								{comicData.data.data.results[0].id}
+								{comic.id}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Stories Available:</b>
-								{comicData.data.data.results[0].stories.available}
+								{comic.stories.available}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Characters Available:</b>
-								{comicData.data.data.results[0].characters.available}
+								{comic.characters.available}
 							</Card.Text>
 						</Card.Body>
 					</Card>

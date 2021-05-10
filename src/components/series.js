@@ -2,34 +2,27 @@ import React, { Component, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const md5 = require("blueimp-md5");
-const publickey = "a9985b299f04decc1427fb3b8d140dd6";
-const privatekey = "f74a2c2d21ce4f90978e52bcd6d3108250293f1a";
-const ts = new Date().getTime();
-const stringToHash = ts + privatekey + publickey;
-const hash = md5(stringToHash);
-const baseUrl = "https://gateway.marvel.com:443/v1/public/series";
-const url = baseUrl + "?ts=" + ts + "&apikey=" + publickey + "&hash=" + hash;
-
 function Seriespage(props) {
 	const [offset, setOffset] = useState(0);
-	const [series, setSeries] = useState(null);
+	const [series, setSeries] = useState();
 	const [page, setPage] = useState(props.match.params.page);
-	useEffect(() => {
-		getSdata();
-	}, [page]);
+	const [total, setTotal] = useState();
 
-	let getSdata = async () => {
-		try {
-			const data = await axios.get(
-				url + "&offset=" + 20 * props.match.params.page + "&limit=20"
-			);
-			setSeries(data);
-			console.log(data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
+	useEffect(() => {
+		const getCdata = async () => {
+			try {
+				axios
+					.get("/series/page/" + props.match.params.page)
+					.then(({ data }) => {
+						setSeries(data.results);
+						setTotal(data.total);
+					});
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getCdata();
+	}, [page]);
 
 	return (
 		<div
@@ -40,23 +33,20 @@ function Seriespage(props) {
 				backgroundSize: "cover",
 			}}
 		>
-			{(series &&
-				props.match.params.page > parseInt(series.data.data.total / 20)) ||
+			{(series && props.match.params.page > parseInt(total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
 			) : (
 				<div>
 					<p>
-						{series &&
-							parseInt(series.data.data.total / 20) >
-								props.match.params.page && (
-								<Link
-									to={`/series/page/${parseInt(props.match.params.page) + 1}`}
-									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
-								>
-									Next Page
-								</Link>
-							)}
+						{series && parseInt(total / 20) > props.match.params.page && (
+							<Link
+								to={`/series/page/${parseInt(props.match.params.page) + 1}`}
+								onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+							>
+								Next Page
+							</Link>
+						)}
 					</p>
 
 					<p>
@@ -70,7 +60,7 @@ function Seriespage(props) {
 						) : null}
 					</p>
 					{series &&
-						series.data.data.results.map((s) => (
+						series.map((s) => (
 							<ul>
 								<li>
 									{" "}

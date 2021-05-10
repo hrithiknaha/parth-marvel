@@ -3,73 +3,53 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 
-const md5 = require("blueimp-md5");
-const publickey = "a9985b299f04decc1427fb3b8d140dd6";
-const privatekey = "f74a2c2d21ce4f90978e52bcd6d3108250293f1a";
-const ts = new Date().getTime();
-const stringToHash = ts + privatekey + publickey;
-const hash = md5(stringToHash);
-const baseUrl = "https://gateway.marvel.com:443/v1/public/series/";
-const url = baseUrl + "?ts=" + ts + "&apikey=" + publickey + "&hash=" + hash;
-
 function SeriesDetails(props) {
-	const [seriesData, setseriesData] = useState(null);
+	const [series, setSeries] = useState();
 
 	useEffect(() => {
-		getseriesDetails();
+		let getSeriesDetails = async () => {
+			console.log(props.match.params.id);
+			try {
+				axios
+					.get("/details/series/" + props.match.params.id)
+					.then(({ data }) => {
+						setSeries(data.results[0]);
+					});
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getSeriesDetails();
 	}, [props.match.params.id]);
-
-	let getseriesDetails = async () => {
-		try {
-			// console.log(baseUrl + props.match.params.id + '?ts=' + ts + '&apikey=' + publickey + '&hash=' + hash);
-			const data = await axios.get(
-				baseUrl +
-					props.match.params.id +
-					"?ts=" +
-					ts +
-					"&apikey=" +
-					publickey +
-					"&hash=" +
-					hash
-			);
-
-			setseriesData(data);
-			console.log(data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
 
 	return (
 		<div>
-			{seriesData && (
+			{series && (
 				<div>
 					<Card style={{ width: "25rem" }}>
 						<Card.Body>
 							<Card.Title>
 								<b>Series Name: </b>
-								{seriesData.data.data.results[0].title}
+								{series.title}
 							</Card.Title>
 							<Card.Img
 								variant="bottom"
-								src={`${seriesData.data.data.results[0].thumbnail.path}.${seriesData.data.data.results[0].thumbnail.extension}`}
+								src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
 							/>
-							<Card.Text>
-								{seriesData.data.data.results[0].description}
-							</Card.Text>
+							<Card.Text>{series.description}</Card.Text>
 							<Card.Text>
 								<b>Series Id:</b>
-								{seriesData.data.data.results[0].id}
+								{series.id}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Stories Available:</b>
-								{seriesData.data.data.results[0].stories.available}
+								{series.stories.available}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Characters Available:</b>
-								{seriesData.data.data.results[0].characters.available}
+								{series.characters.available}
 							</Card.Text>
 						</Card.Body>
 					</Card>
