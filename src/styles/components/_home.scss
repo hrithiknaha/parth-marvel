@@ -1,0 +1,14 @@
+.home {
+	height: 100vh;
+	&-text {
+		padding-top: 4rem;
+	}
+
+	&-links {
+		padding-top: 2rem;
+		width: 50%;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-around;
+	}
+}
