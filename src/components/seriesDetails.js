@@ -12,7 +12,7 @@ function SeriesDetails(props) {
 		<div>
 			{!props.series.serieLoading && (
 				<div>
-					<Card style={{ width: "25rem" }}>
+					<Card className="card">
 						<Card.Body>
 							<Card.Title>
 								<b>Series Name: </b>

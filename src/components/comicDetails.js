@@ -12,7 +12,7 @@ function ComicDetails(props) {
 		<div>
 			{!props.comics.comicLoading && (
 				<div>
-					<Card style={{ width: "25rem" }}>
+					<Card className="card">
 						<Card.Body>
 							<Card.Title>
 								<b>Comic Name: </b>

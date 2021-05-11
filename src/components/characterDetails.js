@@ -14,7 +14,7 @@ function CharacterDetails(props) {
 		<div>
 			{!props.characters.characterLoading && (
 				<div>
-					<Card style={{ width: "25rem" }}>
+					<Card className="card">
 						<Card.Body>
 							<Card.Img
 								variant="top"
