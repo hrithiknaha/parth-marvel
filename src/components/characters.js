@@ -12,49 +12,55 @@ function Characterspage(props) {
 
 	return (
 		<div className="characters">
-			{(!props.characters.allCharactersLoading &&
-				props.match.params.page > parseInt(props.characters.total / 20)) ||
-			props.match.params.page < 0 ? (
-				<p>error 404 not found</p>
-			) : (
-				<div>
-					<p>
-						{props.characters.characters &&
-							parseInt(props.characters.total / 20) >
-								props.match.params.page && (
+			<div className="container">
+				{(!props.characters.allCharactersLoading &&
+					props.match.params.page > parseInt(props.characters.total / 20)) ||
+				props.match.params.page < 0 ? (
+					<p>error 404 not found</p>
+				) : (
+					<div>
+						<p>
+							{props.characters.characters &&
+								parseInt(props.characters.total / 20) >
+									props.match.params.page && (
+									<Link
+										to={`/characters/page/${
+											parseInt(props.match.params.page) + 1
+										}`}
+										onClick={() =>
+											setPage(parseInt(props.match.params.page) + 1)
+										}
+									>
+										Next Page
+									</Link>
+								)}
+						</p>
+
+						<p>
+							{props.match.params.page > 0 ? (
 								<Link
 									to={`/characters/page/${
-										parseInt(props.match.params.page) + 1
+										parseInt(props.match.params.page) - 1
 									}`}
-									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+									onClick={() => setPage(parseInt(props.match.params.page) - 1)}
 								>
-									Next Page
+									Previous Page
 								</Link>
-							)}
-					</p>
+							) : null}
+						</p>
 
-					<p>
-						{props.match.params.page > 0 ? (
-							<Link
-								to={`/characters/page/${parseInt(props.match.params.page) - 1}`}
-								onClick={() => setPage(parseInt(props.match.params.page) - 1)}
-							>
-								Previous Page
-							</Link>
-						) : null}
-					</p>
-
-					{!props.characters.allCharactersLoading &&
-						props.characters.characters.map((c) => (
-							<ul>
-								<li>
-									{" "}
-									<Link to={`/characters/${c.id}`}>{c.name}</Link>
-								</li>
-							</ul>
-						))}
-				</div>
-			)}
+						{!props.characters.allCharactersLoading &&
+							props.characters.characters.map((c) => (
+								<ul>
+									<li>
+										{" "}
+										<Link to={`/characters/${c.id}`}>{c.name}</Link>
+									</li>
+								</ul>
+							))}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

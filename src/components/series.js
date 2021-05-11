@@ -12,45 +12,49 @@ function Seriespage(props) {
 
 	return (
 		<div className="series">
-			{(!props.series.allSeriesLoading &&
-				props.match.params.page > parseInt(props.series.total / 20)) ||
-			props.match.params.page < 0 ? (
-				<p>error 404 not found</p>
-			) : (
-				<div>
-					<p>
-						{props.series.series &&
-							parseInt(props.series.total / 20) > props.match.params.page && (
-								<Link
-									to={`/series/page/${parseInt(props.match.params.page) + 1}`}
-									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
-								>
-									Next Page
-								</Link>
-							)}
-					</p>
+			<div className="container">
+				{(!props.series.allSeriesLoading &&
+					props.match.params.page > parseInt(props.series.total / 20)) ||
+				props.match.params.page < 0 ? (
+					<p>error 404 not found</p>
+				) : (
+					<div>
+						<p>
+							{props.series.series &&
+								parseInt(props.series.total / 20) > props.match.params.page && (
+									<Link
+										to={`/series/page/${parseInt(props.match.params.page) + 1}`}
+										onClick={() =>
+											setPage(parseInt(props.match.params.page) + 1)
+										}
+									>
+										Next Page
+									</Link>
+								)}
+						</p>
 
-					<p>
-						{props.match.params.page > 0 ? (
-							<Link
-								to={`/series/page/${parseInt(props.match.params.page) - 1}`}
-								onClick={() => setPage(parseInt(props.match.params.page) - 1)}
-							>
-								Previous Page
-							</Link>
-						) : null}
-					</p>
-					{!props.series.allSeriesLoading &&
-						props.series.series.map((s) => (
-							<ul>
-								<li>
-									{" "}
-									<Link to={`/series/${s.id}`}>{s.title}</Link>
-								</li>
-							</ul>
-						))}
-				</div>
-			)}
+						<p>
+							{props.match.params.page > 0 ? (
+								<Link
+									to={`/series/page/${parseInt(props.match.params.page) - 1}`}
+									onClick={() => setPage(parseInt(props.match.params.page) - 1)}
+								>
+									Previous Page
+								</Link>
+							) : null}
+						</p>
+						{!props.series.allSeriesLoading &&
+							props.series.series.map((s) => (
+								<ul>
+									<li>
+										{" "}
+										<Link to={`/series/${s.id}`}>{s.title}</Link>
+									</li>
+								</ul>
+							))}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

@@ -12,46 +12,50 @@ function Comicspage(props) {
 
 	return (
 		<div className="comics">
-			{(!props.comics.allComicsLoading &&
-				props.match.params.page > parseInt(props.comics.total / 20)) ||
-			props.match.params.page < 0 ? (
-				<p>error 404 not found</p>
-			) : (
-				<div>
-					<p>
-						{props.comics.comics &&
-							parseInt(props.comics.total / 20) > props.match.params.page && (
+			<div className="container">
+				{(!props.comics.allComicsLoading &&
+					props.match.params.page > parseInt(props.comics.total / 20)) ||
+				props.match.params.page < 0 ? (
+					<p>error 404 not found</p>
+				) : (
+					<div>
+						<p>
+							{props.comics.comics &&
+								parseInt(props.comics.total / 20) > props.match.params.page && (
+									<Link
+										to={`/comics/page/${parseInt(props.match.params.page) + 1}`}
+										onClick={() =>
+											setPage(parseInt(props.match.params.page) + 1)
+										}
+									>
+										Next Page
+									</Link>
+								)}
+						</p>
+
+						<p>
+							{props.match.params.page > 0 ? (
 								<Link
-									to={`/comics/page/${parseInt(props.match.params.page) + 1}`}
-									onClick={() => setPage(parseInt(props.match.params.page) + 1)}
+									to={`/comics/page/${parseInt(props.match.params.page) - 1}`}
+									onClick={() => setPage(parseInt(props.match.params.page) - 1)}
 								>
-									Next Page
+									Previous Page
 								</Link>
-							)}
-					</p>
+							) : null}
+						</p>
 
-					<p>
-						{props.match.params.page > 0 ? (
-							<Link
-								to={`/comics/page/${parseInt(props.match.params.page) - 1}`}
-								onClick={() => setPage(parseInt(props.match.params.page) - 1)}
-							>
-								Previous Page
-							</Link>
-						) : null}
-					</p>
-
-					{!props.comics.allComicsLoading &&
-						props.comics.comics.map((c) => (
-							<ul>
-								<li>
-									{" "}
-									<Link to={`/comics/${c.id}`}>{c.title}</Link>
-								</li>
-							</ul>
-						))}
-				</div>
-			)}
+						{!props.comics.allComicsLoading &&
+							props.comics.comics.map((c) => (
+								<ul>
+									<li>
+										{" "}
+										<Link to={`/comics/${c.id}`}>{c.title}</Link>
+									</li>
+								</ul>
+							))}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
