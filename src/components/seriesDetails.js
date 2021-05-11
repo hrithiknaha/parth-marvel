@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { getSerie } from "../actions/series";
 import { connect } from "react-redux";
+import Loader from "./Loader";
 
 function SeriesDetails(props) {
 	useEffect(() => {
@@ -10,7 +11,7 @@ function SeriesDetails(props) {
 
 	return (
 		<div>
-			{!props.series.serieLoading && (
+			{!props.series.serieLoading ? (
 				<div>
 					<Card className="card">
 						<Card.Body>
@@ -40,6 +41,8 @@ function SeriesDetails(props) {
 						</Card.Body>
 					</Card>
 				</div>
+			) : (
+				<Loader />
 			)}
 		</div>
 	);

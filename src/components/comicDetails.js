@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { getComic } from "../actions/comics";
+import Loader from "./Loader";
 
 function ComicDetails(props) {
 	useEffect(() => {
@@ -10,7 +11,7 @@ function ComicDetails(props) {
 
 	return (
 		<div>
-			{!props.comics.comicLoading && (
+			{!props.comics.comicLoading ? (
 				<div>
 					<Card className="card">
 						<Card.Body>
@@ -40,6 +41,8 @@ function ComicDetails(props) {
 						</Card.Body>
 					</Card>
 				</div>
+			) : (
+				<Loader />
 			)}
 		</div>
 	);

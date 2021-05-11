@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { getCharacter } from "../actions/characters";
+import Loader from "./Loader";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -12,7 +13,7 @@ function CharacterDetails(props) {
 
 	return (
 		<div>
-			{!props.characters.characterLoading && (
+			{!props.characters.characterLoading ? (
 				<div>
 					<Card className="card">
 						<Card.Body>
@@ -42,6 +43,8 @@ function CharacterDetails(props) {
 						</Card.Body>
 					</Card>
 				</div>
+			) : (
+				<Loader />
 			)}
 		</div>
 	);
