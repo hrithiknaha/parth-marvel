@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCharacters } from "../actions/characters";
+import Loader from "./Loader";
 
 function Characterspage(props) {
 	const [page, setPage] = useState(props.match.params.page);
@@ -49,7 +50,7 @@ function Characterspage(props) {
 							) : null}
 						</p>
 
-						{!props.characters.allCharactersLoading &&
+						{!props.characters.allCharactersLoading ? (
 							props.characters.characters.map((c) => (
 								<ul>
 									<li>
@@ -57,7 +58,10 @@ function Characterspage(props) {
 										<Link to={`/characters/${c.id}`}>{c.name}</Link>
 									</li>
 								</ul>
-							))}
+							))
+						) : (
+							<Loader />
+						)}
 					</div>
 				)}
 			</div>

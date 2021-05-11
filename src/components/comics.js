@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getComics } from "../actions/comics";
+import Loader from "./Loader";
 
 function Comicspage(props) {
 	const [page, setPage] = useState(props.match.params.page);
@@ -44,7 +45,7 @@ function Comicspage(props) {
 							) : null}
 						</p>
 
-						{!props.comics.allComicsLoading &&
+						{!props.comics.allComicsLoading ? (
 							props.comics.comics.map((c) => (
 								<ul>
 									<li>
@@ -52,7 +53,10 @@ function Comicspage(props) {
 										<Link to={`/comics/${c.id}`}>{c.title}</Link>
 									</li>
 								</ul>
-							))}
+							))
+						) : (
+							<Loader />
+						)}
 					</div>
 				)}
 			</div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getSeries } from "../actions/series";
+import Loader from "./Loader";
 
 function Seriespage(props) {
 	const [page, setPage] = useState(props.match.params.page);
@@ -43,7 +44,7 @@ function Seriespage(props) {
 								</Link>
 							) : null}
 						</p>
-						{!props.series.allSeriesLoading &&
+						{!props.series.allSeriesLoading ? (
 							props.series.series.map((s) => (
 								<ul>
 									<li>
@@ -51,7 +52,10 @@ function Seriespage(props) {
 										<Link to={`/series/${s.id}`}>{s.title}</Link>
 									</li>
 								</ul>
-							))}
+							))
+						) : (
+							<Loader />
+						)}
 					</div>
 				)}
 			</div>
