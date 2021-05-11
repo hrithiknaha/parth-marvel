@@ -1,55 +1,41 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
+import { getSerie } from "../actions/series";
+import { connect } from "react-redux";
 
 function SeriesDetails(props) {
-	const [series, setSeries] = useState();
-
 	useEffect(() => {
-		let getSeriesDetails = async () => {
-			console.log(props.match.params.id);
-			try {
-				axios
-					.get("/details/series/" + props.match.params.id)
-					.then(({ data }) => {
-						setSeries(data.results[0]);
-					});
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getSeriesDetails();
+		props.getSerie(props.match.params.id);
 	}, [props.match.params.id]);
 
 	return (
 		<div>
-			{series && (
+			{!props.series.serieLoading && (
 				<div>
 					<Card style={{ width: "25rem" }}>
 						<Card.Body>
 							<Card.Title>
 								<b>Series Name: </b>
-								{series.title}
+								{props.series.serie.title}
 							</Card.Title>
 							<Card.Img
 								variant="bottom"
-								src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
+								src={`${props.series.serie.thumbnail.path}.${props.series.serie.thumbnail.extension}`}
 							/>
-							<Card.Text>{series.description}</Card.Text>
+							<Card.Text>{props.series.serie.description}</Card.Text>
 							<Card.Text>
 								<b>Series Id:</b>
-								{series.id}
+								{props.series.serie.id}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Stories Available:</b>
-								{series.stories.available}
+								{props.series.serie.stories.available}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Characters Available:</b>
-								{series.characters.available}
+								{props.series.serie.characters.available}
 							</Card.Text>
 						</Card.Body>
 					</Card>
@@ -59,4 +45,8 @@ function SeriesDetails(props) {
 	);
 }
 
-export default SeriesDetails;
+const mapStateToProps = (state) => ({
+	series: state.series,
+});
+
+export default connect(mapStateToProps, { getSerie })(SeriesDetails);

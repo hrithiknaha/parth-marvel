@@ -1,4 +1,9 @@
-import { GET_SERIES, SET_LOADING } from "../actions/types";
+import {
+	GET_SERIE,
+	GET_SERIES,
+	SET_LOADING,
+	SET_INDIVIDUAL_LOADING,
+} from "../actions/types";
 
 const isEmpty = require("is-empty");
 
@@ -23,6 +28,17 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				allSeriesLoading: action.payload,
+			};
+		case GET_SERIE:
+			return {
+				...state,
+				serieLoading: isEmpty(action.payload),
+				serie: action.payload,
+			};
+		case SET_INDIVIDUAL_LOADING:
+			return {
+				...state,
+				serieLoading: action.payload,
 			};
 		default:
 			return state;

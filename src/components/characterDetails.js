@@ -1,57 +1,43 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
+import { connect } from "react-redux";
+import { getCharacter } from "../actions/characters";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function CharacterDetails(props) {
-	const [character, setCharacter] = useState();
-
 	useEffect(() => {
-		let getcharacterDetails = async () => {
-			console.log(props.match.params.id);
-			try {
-				axios
-					.get("/details/characters/" + props.match.params.id)
-					.then(({ data }) => {
-						setCharacter(data.results[0]);
-					});
-			} catch (e) {
-				console.log(e);
-			}
-		};
-		getcharacterDetails();
+		props.getCharacter(props.match.params.id);
 	}, [props.match.params.id]);
 
 	return (
 		<div>
-			{character && (
+			{!props.characters.characterLoading && (
 				<div>
 					<Card style={{ width: "25rem" }}>
 						<Card.Body>
 							<Card.Img
 								variant="top"
-								src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+								src={`${props.characters.character.thumbnail.path}.${props.characters.character.thumbnail.extension}`}
 							/>
 							<Card.Title>
 								<b>Character Name: </b>
-								{character.name}
+								{props.characters.character.name}
 							</Card.Title>
-							<Card.Text>{character.description}</Card.Text>
+							<Card.Text>{props.characters.character.description}</Card.Text>
 							<Card.Text>
 								<b>Character Id:</b>
-								{character.id}
+								{props.characters.character.id}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Stories Available:</b>
-								{character.stories.available}
+								{props.characters.character.stories.available}
 							</Card.Text>
 							<Card.Text>
 								{" "}
 								<b>Comics Available:</b>
-								{character.comics.available}
+								{props.characters.character.comics.available}
 							</Card.Text>
 						</Card.Body>
 					</Card>
@@ -61,4 +47,8 @@ function CharacterDetails(props) {
 	);
 }
 
-export default CharacterDetails;
+const mapStateToProps = (state) => ({
+	characters: state.characters,
+});
+
+export default connect(mapStateToProps, { getCharacter })(CharacterDetails);
