@@ -22,9 +22,9 @@ class index extends Component {
 					<h5>Scroll for more !</h5>
 					<h5> Brought to you by Parth Purohit</h5>
 				</header>
-				<div className="App-body">
-					<h1 className="center1">For Marvel Fans !</h1>
-					<p className="center1">
+				<div className="container home">
+					<h1 className="home-text">For Marvel Fans !</h1>
+					<p className="home-subtext">
 						The Marvel Cinematic Universe (MCU) is an American media franchise
 						and shared universe centered on a series of superhero films,
 						independently produced by Marvel Studios and based on characters
@@ -33,30 +33,26 @@ class index extends Component {
 						digital series. The shared universe, much like the original Marvel
 						Universe in comic books, was established by crossing over common
 						plot elements, settings, cast, and characters.
-						<br />
-						<br />
-						This App uses Marvel's Developer API. Using the API, we are able to
-						access a large number of data about marvel's universe.
-						<br /> <br />
-						<br />
-						<br />
-						<br />
-						Following links will help under the working in a better way:
 					</p>
-					<br />
-					<br />
-					<br />
-					<Link className="marvelLink" to="/characters/page/0">
-						Characters
-					</Link>
-					<br />
-					<Link className="marvelLink" to="/comics/page/0">
-						Comics
-					</Link>
-					<br />
-					<Link className="marvelLink" to="/series/page/0">
-						Series
-					</Link>
+					<p>
+						This App uses Marvel's Developer API. Using the API, we are able to
+						access a large number of data about marvel's universe.{" "}
+					</p>
+					<p>Following links will help under the working in a better way:</p>
+
+					<div className="home-links">
+						<Link className="marvelLink" to="/characters/page/0">
+							Characters
+						</Link>
+						<br />
+						<Link className="marvelLink" to="/comics/page/0">
+							Comics
+						</Link>
+						<br />
+						<Link className="marvelLink" to="/series/page/0">
+							Series
+						</Link>
+					</div>
 				</div>
 			</div>
 		);
