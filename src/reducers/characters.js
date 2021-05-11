@@ -1,4 +1,4 @@
-import { GET_CHARACTERS } from "../actions/types";
+import { GET_CHARACTERS, SET_LOADING } from "../actions/types";
 
 const isEmpty = require("is-empty");
 
@@ -18,6 +18,11 @@ export default function (state = initialState, action) {
 				allCharactersLoading: isEmpty(action.payload),
 				characters: action.payload.results,
 				total: action.payload.total,
+			};
+		case SET_LOADING:
+			return {
+				...state,
+				allCharactersLoading: action.payload,
 			};
 		default:
 			return state;

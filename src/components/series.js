@@ -1,30 +1,13 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getSeries } from "../actions/series";
 
 function Seriespage(props) {
-	const [offset, setOffset] = useState(0);
-	// const [series, setSeries] = useState();
 	const [page, setPage] = useState(props.match.params.page);
-	// const [total, setTotal] = useState();
 
 	useEffect(() => {
 		props.getSeries(props.match.params.page);
-		// const getCdata = async () => {
-		// 	try {
-		// 		axios
-		// 			.get("/series/page/" + props.match.params.page)
-		// 			.then(({ data }) => {
-		// 				setSeries(data.results);
-		// 				setTotal(data.total);
-		// 			});
-		// 	} catch (e) {
-		// 		console.log(e);
-		// 	}
-		// };
-		// getCdata();
 	}, [page]);
 
 	return (
@@ -64,7 +47,7 @@ function Seriespage(props) {
 							</Link>
 						) : null}
 					</p>
-					{props.series.series &&
+					{!props.series.allSeriesLoading &&
 						props.series.series.map((s) => (
 							<ul>
 								<li>

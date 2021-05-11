@@ -19,7 +19,7 @@ function Characterspage(props) {
 				backgroundSize: "cover",
 			}}
 		>
-			{(props.characters.characters &&
+			{(props.characters.allCharactersLoading &&
 				props.match.params.page > parseInt(props.characters.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
@@ -51,7 +51,7 @@ function Characterspage(props) {
 						) : null}
 					</p>
 
-					{props.characters.characters &&
+					{!props.characters.allCharactersLoading &&
 						props.characters.characters.map((c) => (
 							<ul>
 								<li>

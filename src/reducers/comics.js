@@ -1,4 +1,4 @@
-import { GET_COMICS } from "../actions/types";
+import { GET_COMICS, SET_LOADING } from "../actions/types";
 
 const isEmpty = require("is-empty");
 
@@ -18,6 +18,11 @@ export default function (state = initialState, action) {
 				allComicsLoading: isEmpty(action.payload),
 				comics: action.payload.results,
 				total: action.payload.total,
+			};
+		case SET_LOADING:
+			return {
+				...state,
+				allComicsLoading: action.payload,
 			};
 		default:
 			return state;

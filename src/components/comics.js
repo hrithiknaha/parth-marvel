@@ -48,7 +48,7 @@ function Comicspage(props) {
 						) : null}
 					</p>
 
-					{props.comics.comics &&
+					{!props.comics.allComicsLoading &&
 						props.comics.comics.map((c) => (
 							<ul>
 								<li>
