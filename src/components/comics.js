@@ -11,15 +11,8 @@ function Comicspage(props) {
 	}, [page]);
 
 	return (
-		<div
-			style={{
-				backgroundImage: `url("https://image.winudf.com/v2/image/Y29tLmxpdGVhcHBzLm1hcnZlbHdhbGxwYXBlcl9zY3JlZW5fM18xNTI1NjgwNzQ4XzA3NQ/screen-3.jpg?h=710&fakeurl=1&type=.jpg")`,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundSize: "cover",
-			}}
-		>
-			{(props.comics.comics &&
+		<div className="comics">
+			{(!props.comics.allComicsLoading &&
 				props.match.params.page > parseInt(props.comics.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>

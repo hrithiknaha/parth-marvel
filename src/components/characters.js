@@ -11,15 +11,8 @@ function Characterspage(props) {
 	}, [page]);
 
 	return (
-		<div
-			style={{
-				backgroundImage: `url("https://image.winudf.com/v2/image/Y29tLmxpdGVhcHBzLm1hcnZlbHdhbGxwYXBlcl9zY3JlZW5fN18xNTI1NjgwNzUwXzAzMA/screen-7.jpg?h=710&fakeurl=1&type=.jpg")`,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundSize: "cover",
-			}}
-		>
-			{(props.characters.allCharactersLoading &&
+		<div className="characters">
+			{(!props.characters.allCharactersLoading &&
 				props.match.params.page > parseInt(props.characters.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>

@@ -11,15 +11,8 @@ function Seriespage(props) {
 	}, [page]);
 
 	return (
-		<div
-			style={{
-				backgroundImage: `url("https://c4.wallpaperflare.com/wallpaper/362/830/501/simple-background-captain-america-white-background-marvel-comics-wallpaper-preview.jpg")`,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundSize: "cover",
-			}}
-		>
-			{(props.series.series &&
+		<div className="series">
+			{(!props.series.allSeriesLoading &&
 				props.match.params.page > parseInt(props.series.total / 20)) ||
 			props.match.params.page < 0 ? (
 				<p>error 404 not found</p>
